@@ -1,0 +1,10 @@
+:80 {
+	root * /var/www/html
+
+	file_server
+
+	php_fastcgi unix//var/run/php-fpm.sock
+}
+
+# Refer to the Caddy docs for more information:
+# https://caddyserver.com/docs/caddyfile
