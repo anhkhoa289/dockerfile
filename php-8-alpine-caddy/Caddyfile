@@ -1,0 +1,15 @@
+:80,
+:443 {
+	root * /var/www/html/public
+
+	file_server
+
+	php_fastcgi unix//var/run/php-fpm.sock
+
+    request_body {
+        max_size 5MB
+    }
+}
+
+# Refer to the Caddy docs for more information:
+# https://caddyserver.com/docs/caddyfile

@@ -36,8 +36,8 @@ RUN set -eux; \
     ;
 
 
-COPY zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 COPY default.conf /etc/nginx/http.d/default.conf
+COPY zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # build
