@@ -43,7 +43,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: front-static-nginx
-          file: ./Dockerfile
+          file: ./front-static-nginx/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
