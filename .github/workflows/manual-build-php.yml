@@ -1,4 +1,4 @@
-name: Manual build
+name: Manual build PHP
 
 on:
   workflow_dispatch:
@@ -22,7 +22,7 @@ on:
         default: '7.4'
 
 env:
-  REGISTRY: anhkhoa289
+  REGISTRY: anhkhoa289/php
 
 jobs:
   build:
@@ -53,7 +53,7 @@ jobs:
           SUFFIX: ${{ github.event.inputs.php-version }}
           MY_TAG: v${{ github.event.inputs.tag }}
         with:
-          images: ${{ env.REGISTRY }}/php
+          images: ${{ env.REGISTRY }}
           # flavor: |
           #   latest=false
           tags: |
@@ -86,7 +86,7 @@ jobs:
           SUFFIX: ${{ github.event.inputs.php-version }}-dev
           MY_TAG: v${{ github.event.inputs.tag }}
         with:
-          images: ${{ env.REGISTRY }}/php
+          images: ${{ env.REGISTRY }}
           flavor: |
             latest=false
           tags: |
@@ -120,7 +120,7 @@ jobs:
           SUFFIX: ${{ github.event.inputs.php-version }}-laravel
           MY_TAG: v${{ github.event.inputs.tag }}
         with:
-          images: ${{ env.REGISTRY }}/php
+          images: ${{ env.REGISTRY }}
           flavor: |
             latest=false
           tags: |
