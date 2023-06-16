@@ -1,0 +1,16 @@
+{
+    "name": "khoa/docker",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Khoa Nguyen",
+            "email": "anhkhoa2890@gmail.com"
+        }
+    ],
+    "require": {},
+    "scripts": {
+        "post-autoload-dump": [
+            "echo \"Post successfully\""
+        ]
+    }
+}

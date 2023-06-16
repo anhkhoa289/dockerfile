@@ -16,7 +16,7 @@ RUN set -eux; apk add --update nodejs npm yarn
 
 COPY --chmod=775 composer.json composer.lock $PROJECT_ROOT/
 RUN composer install --no-scripts
-COPY --chmod=775 package.json yarn.lock .yarnrc $PROJECT_ROOT/
+COPY --chmod=775 package.json yarn.lock $PROJECT_ROOT/
 RUN yarn
 
 COPY --chmod=775 ./ $PROJECT_ROOT

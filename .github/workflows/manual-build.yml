@@ -46,7 +46,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Extract metadata (tags, labels) for Docker production
         id: meta
         uses: docker/metadata-action@v4
         env:
@@ -67,7 +67,7 @@ jobs:
             org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile
             org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile
 
-      - name: Build and push Docker image
+      - name: Build and push Docker production image
         uses: docker/build-push-action@v4
         with:
           context: anhkhoa289/php/${{ github.event.inputs.php-major }}
@@ -79,7 +79,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Extract metadata (tags, labels) for Docker development
         id: meta-dev
         uses: docker/metadata-action@v4
         env:
@@ -101,7 +101,7 @@ jobs:
             org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.dev
             org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.dev
 
-      - name: Build and push Docker image
+      - name: Build and push Docker development image
         uses: docker/build-push-action@v4
         with:
           context: anhkhoa289/php/${{ github.event.inputs.php-major }}
@@ -110,5 +110,39 @@ jobs:
           push: true
           tags: ${{ steps.meta-dev.outputs.tags }}
           labels: ${{ steps.meta-dev.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Extract metadata (tags, labels) for Docker laravel
+        id: meta-laravel
+        uses: docker/metadata-action@v4
+        env:
+          SUFFIX: ${{ github.event.inputs.php-version }}-laravel
+          MY_TAG: v${{ github.event.inputs.tag }}
+        with:
+          images: ${{ env.REGISTRY }}/php
+          flavor: |
+            latest=false
+          tags: |
+            type=raw,value=laravel
+            type=raw,value=${{ env.SUFFIX }}
+            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
+            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
+            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
+          labels: |
+            org.opencontainers.image.title=${{ github.event.inputs.php-major }}
+            org.opencontainers.image.description=${{ github.event.inputs.php-major }}
+            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.laravel
+            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.laravel
+
+      - name: Build and push Docker development image
+        uses: docker/build-push-action@v4
+        with:
+          context: anhkhoa289/php/${{ github.event.inputs.php-major }}
+          file: ./anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.laravel
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta-laravel.outputs.tags }}
+          labels: ${{ steps.meta-laravel.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
