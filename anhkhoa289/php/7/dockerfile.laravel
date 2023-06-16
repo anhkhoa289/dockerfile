@@ -14,24 +14,24 @@ ENV NODE_OPTIONS --max_old_space_size=4096
 
 RUN set -eux; apk add --update nodejs npm yarn
 
-COPY --chmod=775 composer.json composer.lock $PROJECT_ROOT/
-RUN composer install --no-scripts
-COPY --chmod=775 package.json yarn.lock $PROJECT_ROOT/
-RUN yarn
+# COPY --chmod=775 composer.json composer.lock $PROJECT_ROOT/
+# RUN composer install --no-scripts
+# COPY --chmod=775 package.json yarn.lock $PROJECT_ROOT/
+# RUN yarn
 
-COPY --chmod=775 ./ $PROJECT_ROOT
-RUN composer run post-autoload-dump
-RUN yarn prod
-RUN rm -rf node_modules
+# COPY --chmod=775 ./ $PROJECT_ROOT
+# RUN composer run post-autoload-dump
+# RUN yarn prod
+# RUN rm -rf node_modules
 
-RUN chmod -R 777 $PROJECT_ROOT/public/
-
-
+# RUN chmod -R 777 $PROJECT_ROOT/public/
 
 
-FROM base AS release
 
-COPY --from=builder $PROJECT_ROOT $PROJECT_ROOT
+
+# FROM base AS release
+
+# COPY --from=builder $PROJECT_ROOT $PROJECT_ROOT
 
 EXPOSE 80
 
