@@ -1,4 +1,4 @@
-FROM anhkhoa289/php:7.4-dev AS base
+FROM anhkhoa289/php:7.4 AS base
 
 ENV PROJECT_ROOT /var/www/html
 WORKDIR $PROJECT_ROOT
@@ -7,6 +7,8 @@ WORKDIR $PROJECT_ROOT
 
 
 FROM base AS builder
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 ENV NODE_OPTIONS --max_old_space_size=4096
 

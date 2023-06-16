@@ -54,14 +54,18 @@ jobs:
           MY_TAG: v${{ github.event.inputs.tag }}
         with:
           images: ${{ env.REGISTRY }}/php
-          flavor: |
-            latest=false
+          # flavor: |
+          #   latest=false
           tags: |
             type=raw,value=${{ env.SUFFIX }}
             type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
             type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
             type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
-          
+          labels: |
+            org.opencontainers.image.title=${{ github.event.inputs.php-major }}
+            org.opencontainers.image.description=${{ github.event.inputs.php-major }}
+            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile
+            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
@@ -72,5 +76,39 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta-dev
+        uses: docker/metadata-action@v4
+        env:
+          SUFFIX: ${{ github.event.inputs.php-version }}-dev
+          MY_TAG: v${{ github.event.inputs.tag }}
+        with:
+          images: ${{ env.REGISTRY }}/php
+          flavor: |
+            latest=false
+          tags: |
+            type=raw,value=dev
+            type=raw,value=${{ env.SUFFIX }}
+            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
+            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
+            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
+          labels: |
+            org.opencontainers.image.title=${{ github.event.inputs.php-major }}
+            org.opencontainers.image.description=${{ github.event.inputs.php-major }}
+            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.dev
+            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.dev
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: anhkhoa289/php/${{ github.event.inputs.php-major }}
+          file: ./anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.dev
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta-dev.outputs.tags }}
+          labels: ${{ steps.meta-dev.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
