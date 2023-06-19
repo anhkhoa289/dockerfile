@@ -29,3 +29,10 @@ RUN set -eux; \
         ;
 
 COPY --from=builder $PROJECT_ROOT $PROJECT_ROOT
+
+
+# RUN echo "0       22       *       *       *       cd $PROJECT_ROOT; php artisan earning_rule:create" >> /etc/crontabs/root
+# RUN echo "0       17       *       *       *       cd $PROJECT_ROOT; php artisan strava_data:update" >> /etc/crontabs/root
+# RUN echo "*       *       *       *       *       cd $PROJECT_ROOT; /usr/local/bin/php artisan schedule:run" >> /etc/crontabs/root
+
+# CMD crond; php-fpm -D; nginx -g 'daemon off;'

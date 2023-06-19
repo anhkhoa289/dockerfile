@@ -3,25 +3,14 @@ name: Manual build PHP
 on:
   workflow_dispatch:
     inputs:
-      php-major:
-        description: Select php major
-        required: true
-        type: string
-        default: '7'
-        options:
-          - '7'
-          - '8'
       tag:
         description: Tag
         required: true
         type: string
-      php-version:
-        description: PHP Version
-        required: true
-        type: string
-        default: '7.4'
 
 env:
+  PHP_MAJOR: 7
+  PHP_VERSION: 7.4
   REGISTRY: anhkhoa289/php
 
 jobs:
@@ -50,7 +39,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         env:
-          SUFFIX: ${{ github.event.inputs.php-version }}
+          SUFFIX: ${{ env.PHP_VERSION }}
           MY_TAG: v${{ github.event.inputs.tag }}
         with:
           images: ${{ env.REGISTRY }}
@@ -62,16 +51,16 @@ jobs:
             type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
             type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
           labels: |
-            org.opencontainers.image.title=${{ github.event.inputs.php-major }}
-            org.opencontainers.image.description=${{ github.event.inputs.php-major }}
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile
+            org.opencontainers.image.title=${{ env.PHP_MAJOR }}
+            org.opencontainers.image.description=${{ env.PHP_MAJOR }}
+            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile
+            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile
 
       - name: Build and push Docker production image
         uses: docker/build-push-action@v4
         with:
-          context: anhkhoa289/php/${{ github.event.inputs.php-major }}
-          file: ./anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile
+          context: anhkhoa289/php/${{ env.PHP_MAJOR }}
+          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -83,7 +72,7 @@ jobs:
         id: meta-composer
         uses: docker/metadata-action@v4
         env:
-          SUFFIX: ${{ github.event.inputs.php-version }}-composer
+          SUFFIX: ${{ env.PHP_VERSION }}-composer
           MY_TAG: v${{ github.event.inputs.tag }}
         with:
           images: ${{ env.REGISTRY }}
@@ -95,16 +84,16 @@ jobs:
             type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
             type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
           labels: |
-            org.opencontainers.image.title=${{ github.event.inputs.php-major }}
-            org.opencontainers.image.description=${{ github.event.inputs.php-major }}
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile
+            org.opencontainers.image.title=${{ env.PHP_MAJOR }}
+            org.opencontainers.image.description=${{ env.PHP_MAJOR }}
+            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile
+            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile
 
       - name: Build and push Docker composer image
         uses: docker/build-push-action@v4
         with:
-          context: anhkhoa289/php/${{ github.event.inputs.php-major }}
-          file: ./anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.composer
+          context: anhkhoa289/php/${{ env.PHP_MAJOR }}
+          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.composer
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta-composer.outputs.tags }}
@@ -116,7 +105,7 @@ jobs:
         id: meta-dev
         uses: docker/metadata-action@v4
         env:
-          SUFFIX: ${{ github.event.inputs.php-version }}-dev
+          SUFFIX: ${{ env.PHP_VERSION }}-dev
           MY_TAG: v${{ github.event.inputs.tag }}
         with:
           images: ${{ env.REGISTRY }}
@@ -129,16 +118,16 @@ jobs:
             type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
             type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
           labels: |
-            org.opencontainers.image.title=${{ github.event.inputs.php-major }}
-            org.opencontainers.image.description=${{ github.event.inputs.php-major }}
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.dev
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.dev
+            org.opencontainers.image.title=${{ env.PHP_MAJOR }}
+            org.opencontainers.image.description=${{ env.PHP_MAJOR }}
+            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.dev
+            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.dev
 
       - name: Build and push Docker development image
         uses: docker/build-push-action@v4
         with:
-          context: anhkhoa289/php/${{ github.event.inputs.php-major }}
-          file: ./anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.dev
+          context: anhkhoa289/php/${{ env.PHP_MAJOR }}
+          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.dev
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta-dev.outputs.tags }}
@@ -150,7 +139,7 @@ jobs:
         id: meta-laravel
         uses: docker/metadata-action@v4
         env:
-          SUFFIX: ${{ github.event.inputs.php-version }}-laravel
+          SUFFIX: ${{ env.PHP_VERSION }}-laravel
           MY_TAG: v${{ github.event.inputs.tag }}
         with:
           images: ${{ env.REGISTRY }}
@@ -163,16 +152,16 @@ jobs:
             type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
             type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
           labels: |
-            org.opencontainers.image.title=${{ github.event.inputs.php-major }}
-            org.opencontainers.image.description=${{ github.event.inputs.php-major }}
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.laravel
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.laravel
+            org.opencontainers.image.title=${{ env.PHP_MAJOR }}
+            org.opencontainers.image.description=${{ env.PHP_MAJOR }}
+            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.laravel
+            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.laravel
 
       - name: Build and push Docker laravel image
         uses: docker/build-push-action@v4
         with:
-          context: anhkhoa289/php/${{ github.event.inputs.php-major }}
-          file: ./anhkhoa289/php/${{ github.event.inputs.php-major }}/dockerfile.laravel
+          context: anhkhoa289/php/${{ env.PHP_MAJOR }}
+          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.laravel
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta-laravel.outputs.tags }}
