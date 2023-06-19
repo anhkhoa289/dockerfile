@@ -1,17 +1,11 @@
-name: Manual build PHP
+name: Manual build PHP 8
 
 on:
   workflow_dispatch:
-    # inputs:
-    #   tag:
-    #     description: Tag
-    #     required: true
-    #     type: string
-  # ${{ github.event.inputs.tag }}
 
 env:
-  PHP_MAJOR: 7
-  PHP_VERSION: v7.4.33
+  PHP_MAJOR: 8
+  PHP_VERSION: v8.2.7
   REGISTRY: anhkhoa289/php
 
 jobs:
@@ -48,14 +42,14 @@ jobs:
           labels: |
             org.opencontainers.image.title=${{ env.PHP_MAJOR }}
             org.opencontainers.image.description=${{ env.PHP_MAJOR }}
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile
+            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile
+            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile
 
       - name: Build and push Docker production image
         uses: docker/build-push-action@v4
         with:
           context: anhkhoa289/php/${{ env.PHP_MAJOR }}
-          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile
+          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -70,8 +64,6 @@ jobs:
           SUFFIX: composer
         with:
           images: ${{ env.REGISTRY }}
-          # flavor: |
-          #   latest=false
           tags: |
             type=raw,value=${{ env.SUFFIX }}
             type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
@@ -80,14 +72,14 @@ jobs:
           labels: |
             org.opencontainers.image.title=${{ env.PHP_MAJOR }}
             org.opencontainers.image.description=${{ env.PHP_MAJOR }}
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile
+            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile
+            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile
 
       - name: Build and push Docker composer image
         uses: docker/build-push-action@v4
         with:
           context: anhkhoa289/php/${{ env.PHP_MAJOR }}
-          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.composer
+          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.composer
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta-composer.outputs.tags }}
@@ -102,8 +94,6 @@ jobs:
           SUFFIX: dev
         with:
           images: ${{ env.REGISTRY }}
-          # flavor: |
-          #   latest=false
           tags: |
             type=raw,value=${{ env.SUFFIX }}
             type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
@@ -112,14 +102,14 @@ jobs:
           labels: |
             org.opencontainers.image.title=${{ env.PHP_MAJOR }}
             org.opencontainers.image.description=${{ env.PHP_MAJOR }}
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.dev
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.dev
+            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.dev
+            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.dev
 
       - name: Build and push Docker development image
         uses: docker/build-push-action@v4
         with:
           context: anhkhoa289/php/${{ env.PHP_MAJOR }}
-          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.dev
+          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.dev
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta-dev.outputs.tags }}
@@ -127,34 +117,32 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Extract metadata (tags, labels) for Docker laravel
-        id: meta-laravel
-        uses: docker/metadata-action@v4
-        env:
-          SUFFIX: laravel
-        with:
-          images: ${{ env.REGISTRY }}
-          # flavor: |
-          #   latest=false
-          tags: |
-            type=raw,value=${{ env.SUFFIX }}
-            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
-            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
-            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
-          labels: |
-            org.opencontainers.image.title=${{ env.PHP_MAJOR }}
-            org.opencontainers.image.description=${{ env.PHP_MAJOR }}
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.laravel
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.laravel
+      # - name: Extract metadata (tags, labels) for Docker laravel
+      #   id: meta-laravel
+      #   uses: docker/metadata-action@v4
+      #   env:
+      #     SUFFIX: laravel
+      #   with:
+      #     images: ${{ env.REGISTRY }}
+      #     tags: |
+      #       type=raw,value=${{ env.SUFFIX }}
+      #       type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
+      #       type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
+      #       type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
+      #     labels: |
+      #       org.opencontainers.image.title=${{ env.PHP_MAJOR }}
+      #       org.opencontainers.image.description=${{ env.PHP_MAJOR }}
+      #       org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.laravel
+      #       org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.laravel
 
-      - name: Build and push Docker laravel image
-        uses: docker/build-push-action@v4
-        with:
-          context: anhkhoa289/php/${{ env.PHP_MAJOR }}
-          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/dockerfile.laravel
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ${{ steps.meta-laravel.outputs.tags }}
-          labels: ${{ steps.meta-laravel.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      # - name: Build and push Docker laravel image
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: anhkhoa289/php/${{ env.PHP_MAJOR }}
+      #     file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.laravel
+      #     platforms: linux/amd64,linux/arm64
+      #     push: true
+      #     tags: ${{ steps.meta-laravel.outputs.tags }}
+      #     labels: ${{ steps.meta-laravel.outputs.labels }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max

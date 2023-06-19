@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-alpine AS base
+FROM php:7.4.33-fpm-alpine AS base
 
 ENV PROJECT_ROOT /var/www/html
 WORKDIR $PROJECT_ROOT
