@@ -35,21 +35,11 @@ RUN set -eux; \
             pdo_mysql \
         ;
 
-RUN set -eux; \
-        apk add --no-cache --virtual .build-deps \
-            autoconf \
-            g++ \
-            make \
-        ; \
-        pecl install xdebug && docker-php-ext-enable xdebug; \
-        apk del --no-network .build-deps;
-
-RUN set -eux; apk add --update nodejs npm yarn
+COPY zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
+COPY docker-php-ext-opcache.ini $PHP_INI_DIR/conf.d/
+COPY custom.ini $PHP_INI_DIR/conf.d/
 
 COPY default.conf /etc/nginx/http.d/default.conf
-COPY zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
-COPY *.ini $PHP_INI_DIR/conf.d/
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 
 EXPOSE 80

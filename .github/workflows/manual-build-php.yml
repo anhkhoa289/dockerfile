@@ -2,15 +2,16 @@ name: Manual build PHP
 
 on:
   workflow_dispatch:
-    inputs:
-      tag:
-        description: Tag
-        required: true
-        type: string
+    # inputs:
+    #   tag:
+    #     description: Tag
+    #     required: true
+    #     type: string
+  # ${{ github.event.inputs.tag }}
 
 env:
   PHP_MAJOR: 7
-  PHP_VERSION: 7.4
+  PHP_VERSION: v7.4.33
   REGISTRY: anhkhoa289/php
 
 jobs:
@@ -38,18 +39,12 @@ jobs:
       - name: Extract metadata (tags, labels) for Docker production
         id: meta
         uses: docker/metadata-action@v4
-        env:
-          SUFFIX: ${{ env.PHP_VERSION }}
-          MY_TAG: v${{ github.event.inputs.tag }}
         with:
           images: ${{ env.REGISTRY }}
-          # flavor: |
-          #   latest=false
           tags: |
-            type=raw,value=${{ env.SUFFIX }}
-            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
-            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
-            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
+            type=semver,pattern={{version}},value=${{ env.PHP_VERSION }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ env.PHP_VERSION }}
+            type=semver,pattern={{major}},value=${{ env.PHP_VERSION }}
           labels: |
             org.opencontainers.image.title=${{ env.PHP_MAJOR }}
             org.opencontainers.image.description=${{ env.PHP_MAJOR }}
@@ -72,17 +67,16 @@ jobs:
         id: meta-composer
         uses: docker/metadata-action@v4
         env:
-          SUFFIX: ${{ env.PHP_VERSION }}-composer
-          MY_TAG: v${{ github.event.inputs.tag }}
+          SUFFIX: composer
         with:
           images: ${{ env.REGISTRY }}
           # flavor: |
           #   latest=false
           tags: |
             type=raw,value=${{ env.SUFFIX }}
-            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
-            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
-            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
+            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
+            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
+            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
           labels: |
             org.opencontainers.image.title=${{ env.PHP_MAJOR }}
             org.opencontainers.image.description=${{ env.PHP_MAJOR }}
@@ -105,18 +99,16 @@ jobs:
         id: meta-dev
         uses: docker/metadata-action@v4
         env:
-          SUFFIX: ${{ env.PHP_VERSION }}-dev
-          MY_TAG: v${{ github.event.inputs.tag }}
+          SUFFIX: dev
         with:
           images: ${{ env.REGISTRY }}
-          flavor: |
-            latest=false
+          # flavor: |
+          #   latest=false
           tags: |
-            type=raw,value=dev
             type=raw,value=${{ env.SUFFIX }}
-            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
-            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
-            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
+            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
+            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
+            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
           labels: |
             org.opencontainers.image.title=${{ env.PHP_MAJOR }}
             org.opencontainers.image.description=${{ env.PHP_MAJOR }}
@@ -139,18 +131,16 @@ jobs:
         id: meta-laravel
         uses: docker/metadata-action@v4
         env:
-          SUFFIX: ${{ env.PHP_VERSION }}-laravel
-          MY_TAG: v${{ github.event.inputs.tag }}
+          SUFFIX: laravel
         with:
           images: ${{ env.REGISTRY }}
-          flavor: |
-            latest=false
+          # flavor: |
+          #   latest=false
           tags: |
-            type=raw,value=laravel
             type=raw,value=${{ env.SUFFIX }}
-            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
-            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
-            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.MY_TAG }}
+            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
+            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
+            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
           labels: |
             org.opencontainers.image.title=${{ env.PHP_MAJOR }}
             org.opencontainers.image.description=${{ env.PHP_MAJOR }}
