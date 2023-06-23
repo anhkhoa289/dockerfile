@@ -1,4 +1,4 @@
-FROM anhkhoa289/php:8.2.7 AS base
+FROM basshub/php:8.2.7 AS base
 
 ENV PROJECT_ROOT /var/www/html
 WORKDIR $PROJECT_ROOT
