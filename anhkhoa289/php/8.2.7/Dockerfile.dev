@@ -1,0 +1,26 @@
+FROM anhkhoa289/php:8.2.7 AS base
+
+ENV PROJECT_ROOT /var/www/html
+WORKDIR $PROJECT_ROOT
+
+
+
+
+FROM base AS builder
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+RUN set -eux; \
+        apk add --no-cache --virtual .build-deps \
+            autoconf \
+            g++ \
+            make \
+        ; \
+        pecl install xdebug && docker-php-ext-enable xdebug; \
+        apk del --no-network .build-deps;
+
+RUN set -eux; apk add --update nodejs npm yarn
+
+EXPOSE 80
+
+CMD php-fpm -D; nginx -g 'daemon off;'

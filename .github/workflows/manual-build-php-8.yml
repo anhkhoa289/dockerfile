@@ -2,10 +2,18 @@ name: Manual build PHP 8
 
 on:
   workflow_dispatch:
+    inputs:
+      php-version:
+        description: Select php version
+        required: true
+        type: choice
+        default: '8.2.7'
+        options:
+          - '8.2.7'
+          - '8.1.20'
+          # ${{ github.event.inputs.php-version }}
 
 env:
-  PHP_MAJOR: 8
-  PHP_VERSION: v8.2.7
   REGISTRY: anhkhoa289/php
 
 jobs:
@@ -36,20 +44,20 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}
           tags: |
-            type=semver,pattern={{version}},value=${{ env.PHP_VERSION }}
-            type=semver,pattern={{major}}.{{minor}},value=${{ env.PHP_VERSION }}
-            type=semver,pattern={{major}},value=${{ env.PHP_VERSION }}
+            type=semver,pattern={{version}},value=${{ github.event.inputs.php-version }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ github.event.inputs.php-version }}
+            type=semver,pattern={{major}},value=${{ github.event.inputs.php-version }}
           labels: |
-            org.opencontainers.image.title=${{ env.PHP_MAJOR }}
-            org.opencontainers.image.description=${{ env.PHP_MAJOR }}
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile
+            org.opencontainers.image.title=${{ github.event.inputs.php-version }}
+            org.opencontainers.image.description=${{ github.event.inputs.php-version }}
+            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-version }}/Dockerfile
+            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-version }}/Dockerfile
 
       - name: Build and push Docker production image
         uses: docker/build-push-action@v4
         with:
-          context: anhkhoa289/php/${{ env.PHP_MAJOR }}
-          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile
+          context: anhkhoa289/php/${{ github.event.inputs.php-version }}
+          file: ./anhkhoa289/php/${{ github.event.inputs.php-version }}/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -66,20 +74,20 @@ jobs:
           images: ${{ env.REGISTRY }}
           tags: |
             type=raw,value=${{ env.SUFFIX }}
-            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
-            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
-            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
+            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ github.event.inputs.php-version }}
+            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ github.event.inputs.php-version }}
+            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ github.event.inputs.php-version }}
           labels: |
-            org.opencontainers.image.title=${{ env.PHP_MAJOR }}
-            org.opencontainers.image.description=${{ env.PHP_MAJOR }}
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile
+            org.opencontainers.image.title=${{ github.event.inputs.php-version }}
+            org.opencontainers.image.description=${{ github.event.inputs.php-version }}
+            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-version }}/Dockerfile
+            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-version }}/Dockerfile
 
       - name: Build and push Docker composer image
         uses: docker/build-push-action@v4
         with:
-          context: anhkhoa289/php/${{ env.PHP_MAJOR }}
-          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.composer
+          context: anhkhoa289/php/${{ github.event.inputs.php-version }}
+          file: ./anhkhoa289/php/${{ github.event.inputs.php-version }}/Dockerfile.composer
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta-composer.outputs.tags }}
@@ -96,20 +104,20 @@ jobs:
           images: ${{ env.REGISTRY }}
           tags: |
             type=raw,value=${{ env.SUFFIX }}
-            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
-            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
-            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
+            type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ github.event.inputs.php-version }}
+            type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ github.event.inputs.php-version }}
+            type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ github.event.inputs.php-version }}
           labels: |
-            org.opencontainers.image.title=${{ env.PHP_MAJOR }}
-            org.opencontainers.image.description=${{ env.PHP_MAJOR }}
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.dev
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.dev
+            org.opencontainers.image.title=${{ github.event.inputs.php-version }}
+            org.opencontainers.image.description=${{ github.event.inputs.php-version }}
+            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-version }}/Dockerfile.dev
+            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-version }}/Dockerfile.dev
 
       - name: Build and push Docker development image
         uses: docker/build-push-action@v4
         with:
-          context: anhkhoa289/php/${{ env.PHP_MAJOR }}
-          file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.dev
+          context: anhkhoa289/php/${{ github.event.inputs.php-version }}
+          file: ./anhkhoa289/php/${{ github.event.inputs.php-version }}/Dockerfile.dev
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta-dev.outputs.tags }}
@@ -126,20 +134,20 @@ jobs:
       #     images: ${{ env.REGISTRY }}
       #     tags: |
       #       type=raw,value=${{ env.SUFFIX }}
-      #       type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
-      #       type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
-      #       type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ env.PHP_VERSION }}
+      #       type=semver,pattern={{version}},suffix=-${{ env.SUFFIX }},value=${{ github.event.inputs.php-version }}
+      #       type=semver,pattern={{major}}.{{minor}},suffix=-${{ env.SUFFIX }},value=${{ github.event.inputs.php-version }}
+      #       type=semver,pattern={{major}},suffix=-${{ env.SUFFIX }},value=${{ github.event.inputs.php-version }}
       #     labels: |
-      #       org.opencontainers.image.title=${{ env.PHP_MAJOR }}
-      #       org.opencontainers.image.description=${{ env.PHP_MAJOR }}
-      #       org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.laravel
-      #       org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.laravel
+      #       org.opencontainers.image.title=${{ github.event.inputs.php-version }}
+      #       org.opencontainers.image.description=${{ github.event.inputs.php-version }}
+      #       org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-version }}/Dockerfile.laravel
+      #       org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/php/${{ github.event.inputs.php-version }}/Dockerfile.laravel
 
       # - name: Build and push Docker laravel image
       #   uses: docker/build-push-action@v4
       #   with:
-      #     context: anhkhoa289/php/${{ env.PHP_MAJOR }}
-      #     file: ./anhkhoa289/php/${{ env.PHP_MAJOR }}/Dockerfile.laravel
+      #     context: anhkhoa289/php/${{ github.event.inputs.php-version }}
+      #     file: ./anhkhoa289/php/${{ github.event.inputs.php-version }}/Dockerfile.laravel
       #     platforms: linux/amd64,linux/arm64
       #     push: true
       #     tags: ${{ steps.meta-laravel.outputs.tags }}
