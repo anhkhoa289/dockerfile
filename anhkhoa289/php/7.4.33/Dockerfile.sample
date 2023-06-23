@@ -1,4 +1,4 @@
-FROM anhkhoa289/php:7.4-laravel AS builder
+FROM basshub/php:7.4.33-laravel AS builder
 
 ENV PROJECT_ROOT /var/www/html
 WORKDIR $PROJECT_ROOT
