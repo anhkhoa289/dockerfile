@@ -52,14 +52,14 @@ jobs:
           labels: |
             org.opencontainers.image.title=Easy RSA
             org.opencontainers.image.description=Easy RSA
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/easy-rsa/bullseye/Dockerfile
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/easy-rsa/bullseye/Dockerfile
+            org.opencontainers.image.source=https://github.com/anhkhoa289/basshub/easy-rsa/bullseye/Dockerfile
+            org.opencontainers.image.url=https://github.com/anhkhoa289/basshub/easy-rsa/bullseye/Dockerfile
 
       - name: Build and push Docker bullseye image
         uses: docker/build-push-action@v4
         with:
-          context: anhkhoa289/easy-rsa/bullseye
-          file: ./anhkhoa289/easy-rsa/bullseye/Dockerfile
+          context: basshub/easy-rsa/bullseye
+          file: ./basshub/easy-rsa/bullseye/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta-bullseye.outputs.tags }}
@@ -85,14 +85,14 @@ jobs:
           labels: |
             org.opencontainers.image.title=Easy RSA
             org.opencontainers.image.description=Easy RSA
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/easy-rsa/alpine/Dockerfile
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/easy-rsa/alpine/Dockerfile
+            org.opencontainers.image.source=https://github.com/anhkhoa289/basshub/easy-rsa/alpine/Dockerfile
+            org.opencontainers.image.url=https://github.com/anhkhoa289/basshub/easy-rsa/alpine/Dockerfile
 
       - name: Build and push Docker alpine image
         uses: docker/build-push-action@v4
         with:
-          context: anhkhoa289/easy-rsa/alpine
-          file: ./anhkhoa289/easy-rsa/alpine/Dockerfile
+          context: basshub/easy-rsa/alpine
+          file: ./basshub/easy-rsa/alpine/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta-alpine.outputs.tags }}

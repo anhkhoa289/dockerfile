@@ -47,14 +47,14 @@ jobs:
           labels: |
             org.opencontainers.image.title=Frontend static
             org.opencontainers.image.description=Frontend static html with nginx
-            org.opencontainers.image.source=https://github.com/anhkhoa289/anhkhoa289/front-static-nginx/dockerfile
-            org.opencontainers.image.url=https://github.com/anhkhoa289/anhkhoa289/front-static-nginx/dockerfile
+            org.opencontainers.image.source=https://github.com/anhkhoa289/basshub/front-static-nginx/Dockerfile
+            org.opencontainers.image.url=https://github.com/anhkhoa289/basshub/front-static-nginx/Dockerfile
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: anhkhoa289/front-static-nginx
-          file: ./anhkhoa289/front-static-nginx/dockerfile
+          context: basshub/front-static-nginx
+          file: ./basshub/front-static-nginx/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
