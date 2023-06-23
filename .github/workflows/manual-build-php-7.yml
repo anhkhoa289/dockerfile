@@ -2,17 +2,11 @@ name: Manual build PHP 7
 
 on:
   workflow_dispatch:
-    # inputs:
-    #   tag:
-    #     description: Tag
-    #     required: true
-    #     type: string
-  # ${{ github.event.inputs.tag }}
 
 env:
   PHP_MAJOR: 7
   PHP_VERSION: v7.4.33
-  REGISTRY: anhkhoa289/php
+  REGISTRY: basshub/php
 
 jobs:
   build:

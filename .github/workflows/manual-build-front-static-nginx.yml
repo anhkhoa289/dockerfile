@@ -9,7 +9,7 @@ on:
         type: string
 
 env:
-  REGISTRY: anhkhoa289/front-static-nginx
+  REGISTRY: basshub/front-static-nginx
 
 jobs:
   build:

@@ -6,7 +6,7 @@ on:
       - v*
 
 env:
-  REGISTRY: anhkhoa289
+  REGISTRY: basshub
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
