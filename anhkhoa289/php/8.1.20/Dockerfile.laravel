@@ -1,0 +1,19 @@
+FROM anhkhoa289/php:8.1.20 AS base
+
+ENV PROJECT_ROOT /var/www/html
+WORKDIR $PROJECT_ROOT
+
+
+
+
+FROM base AS builder
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+ENV NODE_OPTIONS --max_old_space_size=4096
+
+RUN set -eux; apk add --update nodejs npm yarn
+
+EXPOSE 80
+
+CMD php-fpm -D; nginx -g 'daemon off;'
